@@ -1,4 +1,0 @@
-from flask import Flask,  render_template, request, redirect, url_for, session
-from flask_mysqldb import MySQL,MySQLdb 
-from os import path
-from notifypy import Notify 
