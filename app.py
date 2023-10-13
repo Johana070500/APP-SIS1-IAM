@@ -8,10 +8,12 @@ app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'app_iam'
-app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
 
 @app.route('/')
 def home():
     return render_template("contenido.html")    
 
+
+if __name__=='__main__':
+    app.run(debug=True)
