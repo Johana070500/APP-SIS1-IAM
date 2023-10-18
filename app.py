@@ -1,19 +1,22 @@
-from flask import Flask,  render_template, request, redirect, url_for, session 
-from flask_mysqldb import MySQL,MySQLdb 
-from os import path 
-from notifypy import Notify
+from flask import Flask,  render_template
 
 app = Flask(__name__)
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''
-app.config['MYSQL_DB'] = 'app_iam'
-mysql = MySQL(app)
 
 @app.route('/')
 def home():
     return render_template("contenido.html")    
 
+@app.route('/layout')
+def layout():
+    return render_template("contenido.html")
 
-if __name__=='__main__':
+@app.route('/login')
+def login():
+    return render_template("login.html")
+
+@app.route('/registro')
+def registro():
+    return render_template("registro.html")
+
+if __name__ == '__main__':
     app.run(debug=True)
