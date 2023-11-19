@@ -1,0 +1,174 @@
+{% extends 'layout.html' %}
+{% block header %}
+<h1>{% block title %} Inicio administrador {% endblock %}</h1>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h2 class="mt-2 mb-2 text-center">Medicos</h2>
+    <h4 class="mt-4 mb-4 text-center"><button type="button" class="btn btn-info" data-toggle="modal" data-target="#agregar">Agregar</button></h4>
+    <div class="table-responsive">
+        <table class="table table-hover responsive">
+            <thead>
+              <tr class="table-light">
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellido</th>
+                <th scope="col">Correo</th>
+                <th scope="col">Cedula</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for m in medicos %}
+                <tr class="table-light">
+                <th scope="row">{{m.1}}</th>
+                <td>{{m.2}}</td>
+                <td>{{m.4}}</td>
+                <td>{{m.3}}</td>
+                <td><button type="button" class="btn btn-info" data-toggle="modal" data-target="#editar{{m.0}}">Editar</button></td>
+                <td><button type="button" class="btn btn-info" data-toggle="modal" data-target="#pass{{m.0}}">Cambiar contrase&ntilde;a</button></td>
+                <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#eliminar{{m.0}}">Eliminar</button></td>
+            </tr>
+                {%endfor%}
+            </tbody>
+          </table>
+    </div>
+</div>
+<!--    MODAL PARA AGREGAR      -->
+<div class="modal fade" id="agregar" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Agregar medico</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="/agregarMedico" method="post">
+            <div class="form-row">
+                <div class="col">
+                  <input type="text" name="nombre" class="form-control" placeholder="Nombre(s)" required>
+                </div>
+                <div class="col">
+                  <input type="text" name="apellido" class="form-control" placeholder="Apellido(s)" required>
+                </div>
+            </div>
+            <div class="form-row mt-2">
+                <div class="col">
+                  <input type="text" name="correo" class="form-control" placeholder="Correo" required>
+                </div>
+                <div class="col">
+                  <input type="text" name="cedula" class="form-control" placeholder="Cedula" required>
+                </div>
+            </div>
+            <div class="form-row mt-2">
+                <div class="col">
+                    <input type="password" name="contrasena" class="form-control" placeholder="Contraseña" required>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </div>
+        </form>
+      </div>
+    </div>
+</div>
+<!--    MODAL PARA EDITAR    -->
+{% for m in medicos %}
+<div class="modal fade" id="editar{{m.0}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Editar medico</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="/modificarMedico" method="post">
+            <div class="form-row">
+                <input type="hidden" name="id" value="{{m.0}}">
+                <div class="col">
+                  <input type="text" name="nombre" class="form-control" placeholder="Nombre(s)" value="{{m.1}}" required>
+                </div>
+                <div class="col">
+                  <input type="text" name="apellido" class="form-control" placeholder="Apellido(s)" value="{{m.2}}" required>
+                </div>
+            </div>
+            <div class="form-row mt-2">
+                <div class="col">
+                  <input type="text" name="correo" class="form-control" placeholder="Correo" value="{{m.4}}" required>
+                </div>
+                <div class="col">
+                  <input type="text" name="cedula" class="form-control" placeholder="Cedula" value="{{m.3}}" required>
+                </div>
+              </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </div>
+        </form>
+      </div>
+    </div>
+</div>
+<!--    MODAL CAMBIAR CONTRASEÑA  -->
+<div class="modal fade" id="pass{{m.0}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Cambiar contrase&ntilde;a</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="/modificarContrasena" method="post">
+          <div class="form-row">
+              <input type="hidden" name="id" value="{{m.0}}">
+              <div class="col">
+                <input type="password" name="password" class="form-control" required>
+              </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!--    MODAL PARA ELIMINAR     -->
+<div class="modal fade" id="eliminar{{m.0}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Eliminar medico</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="/eliminarMedico" method="post">
+            <div class="form-row">
+                <input type="hidden" name="id" value="{{m.0}}">
+                <div class="col">
+                  <span class="text-center">¿Seguro que desea eliminar al medico {{m.1}} {{m.2}} con la cedula {{m.3}}?</span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Eliminar medico</button>
+        </div>
+        </form>
+      </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock%}

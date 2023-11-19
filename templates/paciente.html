@@ -1,0 +1,234 @@
+{% extends 'layout.html' %}
+{% block header %}
+<h1>{% block title %} Paciente {% endblock %}</h1>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb" class="mt-3">
+        <ol class="breadcrumb">
+            <!-- Nombre del paciente y edad -->
+           <li class="breadcrumb-item active justify-content-between" aria-current="page">{{info_p.0}} {{info_p.1}} - <span>Edad {{info_p.2}}</span></li>
+        </ol>
+    </nav>
+    <p class="text-center">
+        <!--Boton de medicinas -->
+        <a class="btn btn-light col-sm-5" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">Medicamentos</a>
+        <!--Boton de medicinas -->
+        <button class="btn btn-light col-sm-5" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">Estudios</button>
+      </p>
+      <div class="row">
+        <!--Inicio tabla medicinas-->
+        <div class="col">
+          <div class="collapse multi-collapse" id="multiCollapseExample1">
+            <div class="card card-body">
+              <div class="table-responsive">
+                <table class="table table-hover table-sm">
+                    <thead>
+                      <tr>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Dosis</th>
+                        <th scope="col">Inicio</th>
+                        <th scope="col">Fin</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% for m in m %}
+                      <tr>
+                        <th scope="row">{{m.2}}</th>
+                        <td>{{m.1}}</td>
+                        <td>{{m.3}}</td>
+                        <td>{{m.4}}</td>
+                        <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editM{{m.0}}">Editar</button></td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+              </div>
+              <div class="row justify-content-center">
+                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#agregarM">Agregar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--Fin de medicinas-->
+        <!--Inicio de estudios-->
+        <div class="col">
+          <div class="collapse multi-collapse" id="multiCollapseExample2">
+            <div class="card card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-sm">
+                        <thead>
+                          <tr>
+                            <th scope="col">Archivo</th>
+                            <th scope="col">Descripci&oacute;n</th>
+                            <th></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for e in e %}
+                          <tr>
+                            <th scope="row"><a href="/static/estudios/{{e.1}}" target="_blank">{{e.1}}</a></th>
+                            <td>{{e.2}}</td>
+                            <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteE{{e.0}}">Eliminar</button></td>
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row justify-content-center">
+                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#agregarE">Agregar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+<!--Modal agregar medicinas-->
+<div class="modal fade" id="agregarM" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Agregar medicina</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="/addMedicina" method="post">
+            <input type="hidden" name="id_paciente" value="{{id}}">
+        <div class="modal-body">
+          <div class="form-row mb-3">
+            <div class="col">
+                <input type="text" class="form-control" name="nombre_m" maxlength="100" class="form.control" placeholder="Nombre de medicina" required>
+            </div>
+          </div>
+          <div class="form-row mb-3">
+            <div class="col">
+                <input type="text" class="form-control" name="dosis_m" maxlength="100" class="form.control" placeholder="Dosis de medicina" required>
+            </div>
+          </div>
+          <div class="form-row mb-3">
+            <div class="col">
+                <label for="inicio">Fecha de inicio</label>
+                <input type="date" class="form-control" name="inicio_m" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-row mb-3">
+            <div class="col">
+                <label for="inicio">Fecha de fin</label>
+                <input type="date" class="form-control" name="fin_m" class="form-control" required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Guardar medicina</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+<!--Modal agregar archivos-->
+<div class="modal fade" id="agregarE" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Agregar estudio</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="/addE" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="id_paciente" value="{{id}}">
+        <div class="modal-body">
+          <div class="form-row mb-3">
+            <div class="col">
+                <label for="archivo">Seleccione un archivo</label>
+                <input type="file" class="form-control-file" name="archivo" required>
+            </div>
+          </div>
+          <div class="form-row mb-3">
+            <div class="col">
+                <input type="text" class="form-control" name="descripcion" maxlength="100" class="form-control" placeholder="Descripci&oacute;n del archivo" required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Guardar estudio</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+<!--Modal editar medicinas-->
+{% for m in m %}
+<div class="modal fade" id="editM{{m.0}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Agregar medicina</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="/editM" method="post">
+            <input type="hidden" name="id_paciente" value="{{id}}">
+            <input type="hidden" name="id_medicina" value="{{m.0}}">
+        <div class="modal-body">
+          <div class="form-row mb-3">
+            <div class="col">
+                <input type="text" class="form-control" name="nombre_m" maxlength="100" class="form.control" placeholder="Nombre de medicina" value="{{m.2}}" required>
+            </div>
+          </div>
+          <div class="form-row mb-3">
+            <div class="col">
+                <input type="text" class="form-control" name="dosis_m" maxlength="100" class="form.control" placeholder="Dosis de medicina" value="{{m.1}}" required>
+            </div>
+          </div>
+          <div class="form-row mb-3">
+            <div class="col">
+                <label for="inicio">Fecha de inicio</label>
+                <input type="date" class="form-control" name="inicio_m" class="form-control" value="{{m.3}}" required>
+            </div>
+          </div>
+          <div class="form-row mb-3">
+            <div class="col">
+                <label for="inicio">Fecha de fin</label>
+                <input type="date" class="form-control" name="fin_m" class="form-control" value="{{m.4}}" required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Editar medicina</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+<!--Modal eliminar estudios-->
+{% for e in e %}
+<div class="modal fade" id="deleteE{{e.0}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Eliminar estudio</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="/deleteE" method="post">
+            <input type="hidden" name="id_paciente" value="{{id}}">
+            <input type="hidden" name="id_estudio" value="{{e.0}}">
+            <input type="hidden" name="nombre_e" value="{{e.1}}">
+        <div class="modal-body">
+          <p class="text-center">¿Seguro de eliminar el estudio con la descripcion {{e.2}}?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-danger">Eliminar estudio</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+{% endblock%}

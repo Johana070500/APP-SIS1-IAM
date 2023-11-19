@@ -1,0 +1,132 @@
+{% extends 'layout.html' %}
+{% block header %}
+<h1>{% block title %} Pacientes {% endblock %}</h1>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h2 class="mt-2 mb-2 text-center">Pacientes</h2>
+    <h4 class="mt-4 mb-4 text-center"><button type="button" class="btn btn-info" data-toggle="modal" data-target="#agregar">Agregar</button></h4>
+    <div class="table-responsive">
+        <table class="table table-hover responsive">
+            <thead>
+              <tr class="table-light">
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellido</th>
+                <th scope="col">Edad</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for p in pacientes %}
+                <tr class="table-light">
+                    <th scope="row"><a href="/paciente/{{p.0}}">{{p.1}}</a></th>
+                    <td><a href="/paciente/{{p.0}}"></a>{{p.2}}</td>
+                    <td>{{p.3}}</td>
+                    <td><button type="button" class="btn btn-info" data-toggle="modal" data-target="#editar{{p.0}}">Editar</button></td>
+                    <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#eliminar{{p.0}}">Eliminar</button></td>
+                </tr>
+                {%endfor%}
+            </tbody>
+          </table>
+    </div>
+</div>
+<!--    MODAL PARA AGREGAR      -->
+<div class="modal fade" id="agregar" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Agregar paciente</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="/agregarPaciente" method="post">
+            <div class="form-row">
+                <div class="col">
+                  <input type="text" name="nombre" class="form-control" placeholder="Nombre(s)" required>
+                </div>
+                <div class="col">
+                  <input type="text" name="apellido" class="form-control" placeholder="Apellido(s)" required>
+                </div>
+            </div>
+            <div class="form-row mt-2">
+                <div class="col">
+                  <input type="number" name="edad" class="form-control" placeholder="Edad" required>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </div>
+        </form>
+      </div>
+    </div>
+</div>
+<!--    MODAL PARA EDITAR    -->
+{% for p in pacientes %}
+<div class="modal fade" id="editar{{p.0}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Editar paciente</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="/modificarPaciente" method="post">
+            <div class="form-row">
+                <input type="hidden" name="id" value="{{p.0}}">
+                <div class="col">
+                  <input type="text" name="nombre" class="form-control" placeholder="Nombre(s)" value="{{p.1}}" required>
+                </div>
+                <div class="col">
+                  <input type="text" name="apellido" class="form-control" placeholder="Apellido(s)" value="{{p.2}}" required>
+                </div>
+            </div>
+            <div class="form-row mt-2">
+                <div class="col">
+                  <input type="text" name="edad" class="form-control" placeholder="Edad" value="{{p.3}}" required>
+                </div>
+              </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </div>
+        </form>
+      </div>
+    </div>
+</div>
+<!--    MODAL PARA ELIMINAR     -->
+<div class="modal fade" id="eliminar{{p.0}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Eliminar paciente</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="/eliminarPaciente" method="post">
+            <div class="form-row">
+                <input type="hidden" name="id" value="{{p.0}}">
+                <div class="col">
+                  <span class="text-center">¿Seguro que desea eliminar al paciente {{p.1}} {{p.2}}?</span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Eliminar paciente</button>
+        </div>
+        </form>
+      </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock%}
