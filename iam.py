@@ -9,7 +9,7 @@ iam = Flask(__name__)
 iam.secret_key = 'udyieyeiyeiey9838y3iyodh$_%'
 conn = psycopg2.connect(dbname="iam",
                         user="postgres",
-                        password="Ces@rLomeli",
+                        password="1316160727Pg",
                         host="localhost",
                         port=5433)
 iam.config['ESTUDIOS'] = './static/estudios/'
