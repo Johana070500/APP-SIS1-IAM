@@ -1,6 +1,5 @@
-from flask          import Flask, render_template, request, redirect, url_for, session, flash, make_response, send_file
+from flask          import Flask, render_template, request, redirect, url_for, session, flash
 from flask_bcrypt   import bcrypt
-from flask_weasyprint import HTML, render_pdf
 from werkzeug.utils import secure_filename
 from datetime       import datetime
 import psycopg2
@@ -11,7 +10,7 @@ conn = psycopg2.connect(dbname="iam",
                         user="postgres",
                         password="1316160727Pg",
                         host="localhost",
-                        port=5433)
+                        port=5432)
 iam.config['ESTUDIOS'] = './static/estudios/'
 #------------------------------------------------------------ RENDER PAGINA DE LOGIN -----------------------------------------------------------------------------
 @iam.route('/')
