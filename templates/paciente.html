@@ -13,8 +13,9 @@
     <p class="text-center">
         <!--Boton de medicinas -->
         <a class="btn btn-light col-sm-5" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">Medicamentos</a>
-        <!--Boton de medicinas -->
+        <!--Boton de estudios -->
         <button class="btn btn-light col-sm-5" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">Estudios</button>
+        <!--Boton de diagnosticos -->
       </p>
       <div class="row">
         <!--Inicio tabla medicinas-->
@@ -83,6 +84,46 @@
           </div>
         </div>
       </div>
+      <!--Boton de diagnosticos-->
+      <p class="text-center">
+        <button class="btn btn-light col-sm-5" type="button" data-toggle="collapse" data-target="#diagnosis" aria-expanded="false" aria-controls="multiCollapseExample2">Diagnosticos</button>
+      </p>
+      <div class="row">
+        <div class="col">
+          <div class="collapse multi-collapse" id="diagnosis">
+            <div class="card card-body">
+              <!--Inicio tabla diagnosticos-->
+                      
+                                      <div class="table-responsive">
+                                        <table class="table table-hover table-sm">
+                                            <thead>
+                                              <tr>
+                                                <th scope="col">Fecha de diagnostico</th>
+                                                <th scope="col">% de probabilidad</th>
+                                                <th></th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for d in d %}
+                                              <tr>
+                                                <th scope="row">{{d.1}}</th>
+                                                <td>{{d.2}}</td>
+                                                <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#verD{{d.0}}">Ver</button></td>
+                                                <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteD{{d.0}}">Eliminar</button></td>
+                                              </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                          </table>
+                                      </div>
+                                      <div class="row justify-content-center">
+                                        <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#agregarD">Nuevo</button>
+                                      </div>
+                                    
+        <!--Fin de diagnosticos-->
+            </div>
+          </div>
+        </div>
+      </div>
 </div>
 <!--Modal agregar medicinas-->
 <div class="modal fade" id="agregarM" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -127,6 +168,123 @@
       </div>
     </div>
   </div>
+  <!--Modal agregar diagnostico-->
+<div class="modal fade" id="agregarD" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Agregar diagnostico</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/addDiagnostico" method="post">
+          <input type="hidden" name="id_paciente" value="{{id}}">
+      <div class="modal-body">
+        <div class="form-row mb-3">
+          <div class="col">
+              <label for="inicio">Fecha</label>
+              <input type="date" class="form-control" name="fecha_d" class="form.control" required>
+          </div>
+        </div>
+        <div class="form-row mb-3">
+          <div class="col">
+              <label for="inicio">¿El paciente presenta dolor de pecho?</label>
+              <select name="dolor_pecho_d" class="form-control" required><option value="0">NO</option><option value="1">SI</option></select>
+          </div>
+        </div>
+        <div class="form-row mb-3">
+          <div class="col">
+              <label for="inicio">¿El paciente presenta malestar general?</label>
+              <select name="malestar_d" class="form-control" required><option value="0">NO</option><option value="1">SI</option></select>
+          </div>
+        </div>
+        <div class="form-row mb-3">
+          <div class="col">
+              <label for="inicio">¿El paciente presenta mareos?</label>
+              <select name="mareo_d" class="form-control" required><option value="0">NO</option><option value="1">SI</option></select>
+          </div>
+        </div>
+        <div class="form-row mb-3">
+          <div class="col">
+              <label for="inicio">¿El paciente presenta nauseas?</label>
+              <select name="nauseas_d" class="form-control" required><option value="0">NO</option><option value="1">SI</option></select>
+          </div>
+        </div>
+        <div class="form-row mb-3">
+          <div class="col">
+              <label for="inicio">¿El paciente presenta sudoracion?</label>
+              <select name="sudoracion_d" class="form-control" required><option value="0">NO</option><option value="1">SI</option></select>
+          </div>
+        </div>
+        <div class="form-row mb-3">
+          <div class="col">
+              <label for="inicio">¿El paciente presenta alguna extension del dolor?</label>
+              <select name="extension_dolor_d" class="form-control" required><option value="0">NO</option><option value="1">SI</option></select>
+          </div>
+        </div>
+        <div class="form-row mb-3">
+          <div class="col">
+              <input type="text" class="form-control" name="lugar_extension_d" maxlength="100" class="form.control" placeholder="Lugar de la extension del dolor">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Guardar diagnostico</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+ <!--Modal ver diagnostico-->
+ {% for d in d %}
+ <div class="modal fade" id="verD{{d.0}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Detalle diagnostico</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table table-hover table-sm">
+              <thead>
+                <tr>
+                  <th scope="col">Fecha de diagnostico</th>
+                  <th scope="col">% de probabilidad</th>
+                  <th scope="col">Dolor en pecho</th>
+                  <th scope="col">Malestar general</th>
+                  <th scope="col">Mareo</th>
+                  <th scope="col">Nauseas</th>
+                  <th scope="col">Sudoracion</th>
+                  <th scope="col">Extension del dolor</th>
+                  <th scope="col">Lugar de la extension del dolor</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">{{d.1}}</th>
+                  <td>{{d.2}}</td>
+                  <td>{%if d.3=='1'%}SI{%else%}NO{%endif%}</td>
+                  <td>{%if d.4=='1'%}SI{%else%}NO{%endif%}</td>
+                  <td>{%if d.5=='1'%}SI{%else%}NO{%endif%}</td>
+                  <td>{%if d.6=='1'%}SI{%else%}NO{%endif%}</td>
+                  <td>{%if d.7=='1'%}SI{%else%}NO{%endif%}</td>
+                  <td>{%if d.8=='1'%}SI{%else%}NO{%endif%}</td>
+                  <td>{{d.9}}</td>
+                  </tr>
+              </tbody>
+            </table>
+        </div>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endfor %}
 <!--Modal agregar archivos-->
 <div class="modal fade" id="agregarE" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -225,6 +383,31 @@
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-danger">Eliminar estudio</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+<!--Modal eliminar diagnostico-->
+{% for d in d %}
+<div class="modal fade" id="deleteD{{d.0}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Eliminar diagnostico</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="/deleteD" method="post">
+            <input type="hidden" name="id_paciente" value="{{id}}">
+            <input type="hidden" name="id_diagnostico" value="{{d.0}}">
+        <div class="modal-body">
+          <p class="text-center">¿Seguro de eliminar el diagnostico?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-danger">Eliminar diagnostico</button>
         </div>
         </form>
       </div>

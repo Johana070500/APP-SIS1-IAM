@@ -391,8 +391,11 @@ def paciente(id_paciente):
         sql_paciente    = (""" SELECT id_estudio, nombre_archivo, descripcion FROM estudios WHERE id_paciente=%s """)
         select_db.execute(sql_paciente, select_dat)
         estudios = select_db.fetchall()
+        sql_paciente    = (""" SELECT id_diagnostico, fecha, probabilidad, dolor_pecho, malestar, mareo, nauseas, sudoracion, extension_dolor, lugar_extension FROM diagnosticos WHERE id_paciente=%s """)
+        select_db.execute(sql_paciente, select_dat)
+        diagnosticos = select_db.fetchall()
         select_db.close()
-        return render_template("paciente.html", info_p=info_p, m=medicinas, e=estudios, id=id_paciente)
+        return render_template("paciente.html", info_p=info_p, m=medicinas, e=estudios, id=id_paciente, d=diagnosticos)
     else:
         return redirect(url_for('logout'))
 #   Agregar medicina
@@ -411,6 +414,33 @@ def addMedicina():
         conn.commit()
         db.close()
         flash('Medicina agregada al historial','success')
+        return redirect(url_for('paciente', id_paciente=id_paciente ))
+    else:
+        return redirect(url_for('logout'))
+#   Agregar diagnostico
+@iam.route('/addDiagnostico', methods=['POST'])
+def addDiagnostico():
+    if session.get('medico'):
+        id_paciente      = request.form['id_paciente']
+        fecha            = request.form['fecha_d']
+        dolor_pecho      = request.form['dolor_pecho_d']
+        malestar         = request.form['malestar_d']
+        mareo            = request.form['mareo_d']
+        nauseas          = request.form['nauseas_d']
+        sudoracion       = request.form['sudoracion_d']
+        extension_dolor  = request.form['extension_dolor_d']
+        lugar_extension  = request.form['lugar_extension_d']
+        # calculo de probabilidad
+        total = 0
+        total += (int(dolor_pecho)+int(malestar)+int(mareo)+int(nauseas)+int(sudoracion)+int(extension_dolor))
+        probabilidad = ((100/6)*total)
+        sql              =(""" INSERT INTO diagnosticos (id_paciente, fecha, probabilidad, dolor_pecho, malestar, mareo, nauseas, sudoracion, extension_dolor, lugar_extension) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) """)
+        dat              =(id_paciente, fecha, probabilidad, dolor_pecho, malestar, mareo, nauseas, sudoracion, extension_dolor, lugar_extension)
+        db          = conn.cursor()
+        db.execute(sql, dat)
+        conn.commit()
+        db.close()
+        flash('Diagnostico agregado al historial','success')
         return redirect(url_for('paciente', id_paciente=id_paciente ))
     else:
         return redirect(url_for('logout'))
@@ -479,6 +509,23 @@ def deleteE():
         #   Eliminar archivo fisico
         os.remove(os.path.join(iam.config['ESTUDIOS'], nombre))
         flash('Se elimino con exito el estudio','success')
+        return redirect(url_for('paciente',id_paciente=id_paciente))
+    else:
+        return redirect(url_for('logout'))
+#   Eliminar diagnostico
+@iam.route('/deleteD',methods=['POST'])
+def deleteD():
+    if session.get('medico'):
+        id_paciente = request.form['id_paciente']
+        id_diagnostico  = request.form['id_diagnostico']
+        sql = (""" DELETE FROM diagnosticos WHERE id_diagnostico=%s """)
+        dat = (id_diagnostico,)
+        db  = conn.cursor()
+        db.execute(sql, dat)
+        conn.commit()
+        db.close()
+        #   Eliminar archivo fisico
+        flash('Se elimino con exito el diagnostico','success')
         return redirect(url_for('paciente',id_paciente=id_paciente))
     else:
         return redirect(url_for('logout'))
