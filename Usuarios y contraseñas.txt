@@ -1,0 +1,7 @@
+administrador:
+admin2@gmail.com
+123
+
+medico:	
+uncorreo@gmail.com
+1
