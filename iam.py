@@ -380,18 +380,18 @@ def eliminarAdmin():
 @iam.route('/paciente/<string:id_paciente>',methods=['GET'])
 def paciente(id_paciente):
     if session.get('medico'):
-        sql_paciente    = (""" SELECT nombre, apellido, edad FROM paciente WHERE id_paciente=%s""")
+        sql_paciente    = (""" SELECT nombre, apellido, edad FROM paciente WHERE id_paciente= %s""")
         select_db       = conn.cursor()
         select_dat      = (id_paciente)
         select_db.execute(sql_paciente, select_dat)
         info_p  = select_db.fetchone()
-        sql_paciente    = (""" SELECT id_medicina, dosis, nombre_medicina, fecha_inicio, fecha_fin FROM medicinas WHERE id_paciente=%s """)
+        sql_paciente    = (""" SELECT id_medicina, dosis, nombre_medicina, fecha_inicio, fecha_fin FROM medicinas WHERE id_paciente= %s """)
         select_db.execute(sql_paciente, select_dat)
         medicinas       = select_db.fetchall()
         sql_paciente    = (""" SELECT id_estudio, nombre_archivo, descripcion FROM estudios WHERE id_paciente=%s """)
         select_db.execute(sql_paciente, select_dat)
         estudios = select_db.fetchall()
-        sql_paciente    = (""" SELECT id_diagnostico, fecha, probabilidad, dolor_pecho, malestar, mareo, nauseas, sudoracion, extension_dolor, lugar_extension FROM diagnosticos WHERE id_paciente=%s """)
+        sql_paciente    = (""" SELECT id_diagnostico, fecha, probabilidad, dolor_pecho, malestar, mareo, nauseas, sudoracion, extension_dolor, lugar_extension, colesterol, azucar, presion FROM diagnosticos WHERE id_paciente=%s """)
         select_db.execute(sql_paciente, select_dat)
         diagnosticos = select_db.fetchall()
         select_db.close()
@@ -430,12 +430,15 @@ def addDiagnostico():
         sudoracion       = request.form['sudoracion_d']
         extension_dolor  = request.form['extension_dolor_d']
         lugar_extension  = request.form['lugar_extension_d']
+        colesterol       = request.form['colesterol_d']
+        azucar  = request.form['azucar_d']
+        presion  = request.form['presion_d']
         # calculo de probabilidad
         total = 0
         total += (int(dolor_pecho)+int(malestar)+int(mareo)+int(nauseas)+int(sudoracion)+int(extension_dolor))
         probabilidad = ((100/6)*total)
-        sql              =(""" INSERT INTO diagnosticos (id_paciente, fecha, probabilidad, dolor_pecho, malestar, mareo, nauseas, sudoracion, extension_dolor, lugar_extension) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) """)
-        dat              =(id_paciente, fecha, probabilidad, dolor_pecho, malestar, mareo, nauseas, sudoracion, extension_dolor, lugar_extension)
+        sql              =(""" INSERT INTO diagnosticos (id_paciente, fecha, probabilidad, dolor_pecho, malestar, mareo, nauseas, sudoracion, extension_dolor, lugar_extension, colesterol, azucar, presion) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) """)
+        dat              =(id_paciente, fecha, probabilidad, dolor_pecho, malestar, mareo, nauseas, sudoracion, extension_dolor, lugar_extension, colesterol, azucar, presion)
         db          = conn.cursor()
         db.execute(sql, dat)
         conn.commit()

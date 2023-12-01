@@ -99,7 +99,7 @@
                                             <thead>
                                               <tr>
                                                 <th scope="col">Fecha de diagnostico</th>
-                                                <th scope="col">% de probabilidad</th>
+                                                <th scope="col">Probabilidad de IAM</th>
                                                 <th></th>
                                               </tr>
                                             </thead>
@@ -108,6 +108,7 @@
                                               <tr>
                                                 <th scope="row">{{d.1}}</th>
                                                 <td>{{d.2}}</td>
+                                                <!--<td>{%if d.2>=65 and d.10>=100%}SI{%else%}NO{%endif%}</td>-->
                                                 <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#verD{{d.0}}">Ver</button></td>
                                                 <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteD{{d.0}}">Eliminar</button></td>
                                               </tr>
@@ -189,6 +190,21 @@
         </div>
         <div class="form-row mb-3">
           <div class="col">
+              <input type="number" class="form-control" name="colesterol_d"  class="form.control" placeholder="Colesterol" required>
+          </div>
+        </div>
+        <div class="form-row mb-3">
+          <div class="col">
+              <input type="number" class="form-control" name="azucar_d" class="form.control" placeholder="Azucar" required>
+          </div>
+        </div>
+        <div class="form-row mb-3">
+          <div class="col">
+              <input type="number" class="form-control" name="presion_d"  class="form.control" placeholder="Presion" required>
+          </div>
+        </div>
+        <div class="form-row mb-3">
+          <div class="col">
               <label for="inicio">¿El paciente presenta dolor de pecho?</label>
               <select name="dolor_pecho_d" class="form-control" required><option value="0">NO</option><option value="1">SI</option></select>
           </div>
@@ -219,7 +235,7 @@
         </div>
         <div class="form-row mb-3">
           <div class="col">
-              <label for="inicio">¿El paciente presenta alguna extension del dolor?</label>
+              <label for="inicio">¿El paciente presenta alguna extension del dolor de pecho?</label>
               <select name="extension_dolor_d" class="form-control" required><option value="0">NO</option><option value="1">SI</option></select>
           </div>
         </div>
@@ -253,7 +269,10 @@
               <thead>
                 <tr>
                   <th scope="col">Fecha de diagnostico</th>
-                  <th scope="col">% de probabilidad</th>
+                  <th scope="col">Probabilidad de IAM</th>
+                  <th scope="col">Colesterol</th>
+                  <th scope="col">Azucar</th>
+                  <th scope="col">Presion</th>
                   <th scope="col">Dolor en pecho</th>
                   <th scope="col">Malestar general</th>
                   <th scope="col">Mareo</th>
@@ -268,6 +287,9 @@
                 <tr>
                   <th scope="row">{{d.1}}</th>
                   <td>{{d.2}}</td>
+                  <td>{{d.10}}</td>
+                  <td>{{d.11}}</td>
+                  <td>{{d.12}}</td>
                   <td>{%if d.3=='1'%}SI{%else%}NO{%endif%}</td>
                   <td>{%if d.4=='1'%}SI{%else%}NO{%endif%}</td>
                   <td>{%if d.5=='1'%}SI{%else%}NO{%endif%}</td>
@@ -275,6 +297,7 @@
                   <td>{%if d.7=='1'%}SI{%else%}NO{%endif%}</td>
                   <td>{%if d.8=='1'%}SI{%else%}NO{%endif%}</td>
                   <td>{{d.9}}</td>
+                  
                   </tr>
               </tbody>
             </table>
