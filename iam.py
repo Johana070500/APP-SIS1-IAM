@@ -436,7 +436,15 @@ def addDiagnostico():
         # calculo de probabilidad
         total = 0
         total += (int(dolor_pecho)+int(malestar)+int(mareo)+int(nauseas)+int(sudoracion)+int(extension_dolor))
-        probabilidad = ((100/6)*total)
+        probabilidad = ((100/9)*total)
+        if int(colesterol)>=200:
+            probabilidad += 20
+        if int(azucar)>=120:
+            probabilidad += 15
+        if int(presion)>=130:
+            probabilidad += 25
+        if probabilidad>100:
+            probabilidad = 95
         sql              =(""" INSERT INTO diagnosticos (id_paciente, fecha, probabilidad, dolor_pecho, malestar, mareo, nauseas, sudoracion, extension_dolor, lugar_extension, colesterol, azucar, presion) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) """)
         dat              =(id_paciente, fecha, probabilidad, dolor_pecho, malestar, mareo, nauseas, sudoracion, extension_dolor, lugar_extension, colesterol, azucar, presion)
         db          = conn.cursor()

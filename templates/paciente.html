@@ -107,8 +107,8 @@
                                             {% for d in d %}
                                               <tr>
                                                 <th scope="row">{{d.1}}</th>
-                                                <td>{{d.2}}</td>
-                                                <!--<td>{%if d.2>=65 and d.10>=100%}SI{%else%}NO{%endif%}</td>-->
+                                                <!--<td>{{d.2}}</td>-->
+                                                <td>{%if d.2>=67%}SI{%else%}NO{%endif%}</td>
                                                 <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#verD{{d.0}}">Ver</button></td>
                                                 <td><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteD{{d.0}}">Eliminar</button></td>
                                               </tr>
@@ -270,8 +270,8 @@
                 <tr>
                   <th scope="col">Fecha de diagnostico</th>
                   <th scope="col">Probabilidad de IAM</th>
-                  <th scope="col">Colesterol</th>
-                  <th scope="col">Azucar</th>
+                  <th scope="col">Colesterol mg/dl</th>
+                  <th scope="col">Azucar mg/dl</th>
                   <th scope="col">Presion</th>
                   <th scope="col">Dolor en pecho</th>
                   <th scope="col">Malestar general</th>
@@ -286,7 +286,7 @@
               <tbody>
                 <tr>
                   <th scope="row">{{d.1}}</th>
-                  <td>{{d.2}}</td>
+                  <td>{{d.2}}%</td>
                   <td>{{d.10}}</td>
                   <td>{{d.11}}</td>
                   <td>{{d.12}}</td>

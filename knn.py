@@ -5,6 +5,10 @@
 import numpy as np # linear algebra
 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import classification_report
 
 # Input data files are available in the read-only "../input/" directory
 # For example, running this (by clicking run or pressing Shift+Enter) will list all files under the input directory
@@ -35,11 +39,11 @@ x_dt = dt.drop(["target"], axis = 1)
 x = (x_dt - np.min(x_dt))/(np.max(x_dt)-np.min(x_dt))
 
 # Creamos el conjunto de entrenamiento y conjunto de prueba. 80% entrenar. 20% prueba.
-from sklearn.model_selection import train_test_split
+
 x_train, x_test, y_train, y_test = train_test_split(x,y,test_size = 0.2, random_state = 42)
 
 # Entrenamiento del modelo KNN
-from sklearn.neighbors import KNeighborsClassifier
+
 knn = KNeighborsClassifier(n_neighbors = 2) # I chose K = 3 just for now.
 knn.fit(x_train, y_train)
 
@@ -48,10 +52,10 @@ prediction = knn.predict(x_test)
 print("{} nn score: {} ".format(2,knn.score(x_test,y_test)))
 
 # Matriz de confusion
-from sklearn.metrics import confusion_matrix
+
 cm = confusion_matrix(y_test, prediction)
 print(confusion_matrix(y_test, prediction))
-from sklearn.metrics import classification_report
+
 print(classification_report(y_test, prediction))
 
 # Visualizacion de los datos de prueba
